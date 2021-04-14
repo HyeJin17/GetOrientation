@@ -1,11 +1,15 @@
 package com.sample.getorientation;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +21,28 @@ public class MainActivity extends AppCompatActivity {
     SensorEventListener listener;
 
     private float[] magValues ,accValues;
+
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(listener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        sensorManager.unregisterListener(listener);
+       // sensorManager.requestTriggerSensor( ,listener);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
